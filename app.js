@@ -1,4 +1,4 @@
-// Github Class instance
+// Instances
 const github = new Github();
 const ui = new UI();
 
@@ -7,16 +7,18 @@ document.querySelector('#searchUser').addEventListener('keyup', function(e){
     // Get username input
     let username = e.target.value;
 
-    if(username == ''){
+    if( username == '' ){
         // Clear user info
         document.querySelector('#profile').innerHTML = '';
     } else {
-        // Send API request
-        let userInfo = github.getUser(username);
-        userInfo.then(res => {
-            if(res.message != 'Not Found'){
+        // Make HTTP call
+        let request = github.getUser(username);
+
+        request.then(data => {
+            if(data.profile.message != 'Not Found'){
                 // Paint the UI of the user informations
-                ui.paintUserInfo(res);
+                ui.paintUserInfo(data.profile);
+                ui.paintRepositories(data.repos);
             } else {
                 // Paint a notice if user not exist
                 ui.showAlert();
